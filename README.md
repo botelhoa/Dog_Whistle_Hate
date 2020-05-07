@@ -1,6 +1,6 @@
-## The following repository contains the code used to produce the results in (forthcoming paper)
+## This repository contains the code used to produce the results in (forthcoming paper)
 
-This repo's contents include...(forthcoming)
+The contents include...(to be added)
 - Classification Models
 - Model results
 - Dog Whistle 6k dataset

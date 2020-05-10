@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """Transformer_Runner.ipynb
 
-This py script fine-tunes and tests various classification models provided through the Hugging Face library.
+This py script fine-tunes, tests, and optimizes over a hyperparameter sweep various classification models 
+provided through the Hugging Face library including text pre-processing.
 It is compatible with AlBERT, BART, BERT, DistilBERT, RoBERTa, and XLNet.
 
 Inspiration was derived from https://github.com/huggingface/transformers/blob/master/examples/run_glue.py

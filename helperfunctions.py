@@ -138,7 +138,7 @@ def training_plot(train_loss_values, val_loss_values):
     plt.ylabel("Loss")
     plt.legend()
 
-    #fig.savefig("dogwhistle_train_plot.png",bbox_inches='tight')
+    #plt.savefig("dogwhistle_train_plot.png",bbox_inches='tight')
 
     return plt.show()
 

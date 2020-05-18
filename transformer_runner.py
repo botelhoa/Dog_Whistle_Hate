@@ -300,58 +300,60 @@ class TransformerClassifier(nn.Module):
     
         return metrics(true_labels, predictions, argmax_needed= True)
 
-#RoBERTa fine-tuning hyperparameters for GLUE: 
-NOMARLIZE_LIST = ['url', 'email', 'percent', 'money', 'phone', 'user', 'time', 'date', 'number']
-ANNOTATE_LIST = ['hashtag', 'allcaps', 'elongated', 'repeated', 'emphasis', 'censored']
-LEARNING_RATE = [1e-5, 2e-5, 3e-5]
-N_EPOCHS = 10 
-EARLY_STOPPING = {"patience": 2, "delta": 0.03}
-N_LABELS =  4
-PAD_LENGTH = 64
-BATCH_SIZE = [16, 32]
-WEIGHT_DECAY = 0.1 
-WARMUP = 0.06 
-OUTPUT_DIR = "/content/drive/My Drive/Dog_Whistle_Code/Fine_Tuned_Models/Text"
 
-results_dict = {}
-max_f1_value = 0
+if __name__ == '__main__':
+    #RoBERTa fine-tuning hyperparameters for GLUE: 
+    NOMARLIZE_LIST = ['url', 'email', 'percent', 'money', 'phone', 'user', 'time', 'date', 'number']
+    ANNOTATE_LIST = ['hashtag', 'allcaps', 'elongated', 'repeated', 'emphasis', 'censored']
+    LEARNING_RATE = [1e-5, 2e-5, 3e-5]
+    N_EPOCHS = 10 
+    EARLY_STOPPING = {"patience": 2, "delta": 0.03}
+    N_LABELS =  4
+    PAD_LENGTH = 64
+    BATCH_SIZE = [16, 32]
+    WEIGHT_DECAY = 0.1 
+    WARMUP = 0.06 
+    OUTPUT_DIR = "/content/drive/My Drive/Dog_Whistle_Code/Fine_Tuned_Models/Text"
 
-for i in BATCH_SIZE:
-    learning_rate_dict = {}
-    for j in LEARNING_RATE: 
-        Classifier = TransformerClassifier("DistilBERT", N_LABELS) 
+    results_dict = {}
+    max_f1_value = 0
+
+    for i in BATCH_SIZE:
+        learning_rate_dict = {}
+        for j in LEARNING_RATE: 
+            Classifier = TransformerClassifier("DistilBERT", N_LABELS) 
+            train_dict, tokenizer = Classifier.fine_tune(train["text.clean"], train["labels"], dev["text.clean"], dev["labels"], NORMALIZE_LIST, ANNOTATE_LIST, PAD_LENGTH, EARLY_STOPPING, i, N_EPOCHS, j, WEIGHT_DECAY, WARMUP) 
+            learning_rate_dict[j], labels, preds = Classifier.test(test["text.clean"], test["labels"], NORMALIZE_LIST, ANNOTATE_LIST)
+
+        if learning_rate_dict[j]["f1"] >= max_f1_value: #only save best model
+            max_f1_value = learning_rate_dict[j]["f1"]
+            print("The new top F1 score is: {}. Saving model...".format(max_f1_value))
+            model_saver(Classifier, "DistilBERT", OUTPUT_DIR, train_dict, labels, preds, learning_rate_dict[j], tokenizer)
+
+        results_dict[i] = learning_rate_dict 
+
+    #save complete training results
+    np.save(os.path.join(os.path.join(OUTPUT_DIR, "DistlBERT"), "dogwhistle_total_training_results.npy"), results_dict)
+
+    BEST_LR = 
+    BEST_BATCH_SIZE = 
+    MODEL_LIST = ["AlBERT", "BART", "BERT", "DistilBERT", "RoBERTa", "XLNet"]
+
+    model_comparison = {}
+
+    for model in MODEL_LIST:
+        Classifier = TransformerClassifier(model, N_LABELS) 
         train_dict, tokenizer = Classifier.fine_tune(train["text.clean"], train["labels"], dev["text.clean"], dev["labels"], NORMALIZE_LIST, ANNOTATE_LIST, PAD_LENGTH, EARLY_STOPPING, i, N_EPOCHS, j, WEIGHT_DECAY, WARMUP) 
-        learning_rate_dict[j], labels, preds = Classifier.test(test["text.clean"], test["labels"], NORMALIZE_LIST, ANNOTATE_LIST)
+        model_comparison[model], labels, preds = Classifier.test(test["text.clean"], test["labels"], NORMALIZE_LIST, ANNOTATE_LIST)
+        model_saver(Classifier, model, OUTPUT_DIR, train_dict, labels, preds, model_comparison[model], tokenizer)
 
-    if learning_rate_dict[j]["f1"] >= max_f1_value: #only save best model
-        max_f1_value = learning_rate_dict[j]["f1"]
-        print("The new top F1 score is: {}. Saving model...".format(max_f1_value))
-        model_saver(Classifier, "DistilBERT", OUTPUT_DIR, train_dict, labels, preds, learning_rate_dict[j], tokenizer)
+    #save complete training results
+    np.save(os.path.join(os.path.join(OUTPUT_DIR, model), "dogwhistle_total_training_results.npy"), model_comparison)
 
-    results_dict[i] = learning_rate_dict 
+    X_TICK_LABELS = []
+    Y_TICK_LABELS = []
+    COLOR = "blues"
+    SAVE_NAME = "_cm_dogwhistle.png" #update with best model
+    BEST_RESULTS = 
 
-#save complete training results
-np.save(os.path.join(os.path.join(OUTPUT_DIR, "DistlBERT"), "dogwhistle_total_training_results.npy"), results_dict)
-
-BEST_LR = 
-BEST_BATCH_SIZE = 
-MODEL_LIST = ["AlBERT", "BART", "BERT", "DistilBERT", "RoBERTa", "XLNet"]
-
-model_comparison = {}
-
-for model in MODEL_LIST:
-    Classifier = TransformerClassifier(model, N_LABELS) 
-    train_dict, tokenizer = Classifier.fine_tune(train["text.clean"], train["labels"], dev["text.clean"], dev["labels"], NORMALIZE_LIST, ANNOTATE_LIST, PAD_LENGTH, EARLY_STOPPING, i, N_EPOCHS, j, WEIGHT_DECAY, WARMUP) 
-    model_comparison[model], labels, preds = Classifier.test(test["text.clean"], test["labels"], NORMALIZE_LIST, ANNOTATE_LIST)
-    model_saver(Classifier, model, OUTPUT_DIR, train_dict, labels, preds, model_comparison[model], tokenizer)
-
-#save complete training results
-np.save(os.path.join(os.path.join(OUTPUT_DIR, model), "dogwhistle_total_training_results.npy"), model_comparison)
-
-X_TICK_LABELS = []
-Y_TICK_LABELS = []
-COLOR = "blues"
-SAVE_NAME = "_cm_dogwhistle.png" #update with best model
-BEST_RESULTS = 
-
-confusion_matrix_plotter(BEST_RESULTS, SAVE_NAME, X_TICK_LABELS, Y_TICK_LABELS, COLOR)
+    confusion_matrix_plotter(BEST_RESULTS, SAVE_NAME, X_TICK_LABELS, Y_TICK_LABELS, COLOR)

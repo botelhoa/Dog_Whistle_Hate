@@ -132,51 +132,53 @@ def model(x_train, y_train, base_model, num_epochs: int=10, learning_rate: int=0
     train_dict = {"Train Accuracy": train_acc, "Train Loss": train_loss, "Val Accuracy": val_acc, "Val Loss": val_loss}
     return history, train_dict
 
-#Define hyperparameters
-MODEL_DICT = {"InceptionV3": InceptionV3, "VGG16": VGG16, "DenseNet201": DenseNet201, "MobileNetV2": MobileNetV2, 
-              "ResNet15V2": ResNet152V2, "InceptionResNetV2": InceptionResNetV2, "NASNetLarge": NASNetLarge, "Xception": Xception}
-LEARNING_RATES = [1e-5, 1e-4, 1e-3, 1e-2, 1e-1]
-MIN_DELTA = 0.0001
-PATIENCE = 5
-VAL_SPLIT = 0.2
-BATCH_SIZES = [64, 128] #TODO: set batch sizes
-NUM_EPOCHS = 50
-OUTPUT_DIR = "/content/drive/My Drive/Dog_Whistle_Code/Fine_Tuned_Models/Image"
 
-best_models = {}
+if __name__ == '__main__':
+    #Define hyperparameters
+    MODEL_DICT = {"InceptionV3": InceptionV3, "VGG16": VGG16, "DenseNet201": DenseNet201, "MobileNetV2": MobileNetV2, 
+                  "ResNet15V2": ResNet152V2, "InceptionResNetV2": InceptionResNetV2, "NASNetLarge": NASNetLarge, "Xception": Xception}
+    LEARNING_RATES = [1e-5, 1e-4, 1e-3, 1e-2, 1e-1]
+    MIN_DELTA = 0.0001
+    PATIENCE = 5
+    VAL_SPLIT = 0.2
+    BATCH_SIZES = [64, 128] #TODO: set batch sizes
+    NUM_EPOCHS = 50
+    OUTPUT_DIR = "/content/drive/My Drive/Dog_Whistle_Code/Fine_Tuned_Models/Image"
 
-for model_selection in MODEL_DICT.keys():
-    print("Running {}...".format(model_selection))
+    best_models = {}
 
-    top_f1 = 0
+    for model_selection in MODEL_DICT.keys():
+        print("Running {}...".format(model_selection))
 
-    for bs in BATCH_SIZE:
-        for lr in LEARNING_RATE:
-            temp_model = MODEL_DICT[model_selection](weights='imagenet', include_top=False)
-    
-            if model_selection != "NASNetLarge":
-                history_temp_model, train_dict = model(x_train_resized, y_train_hot_encoded, temp_model, NUM_EPOCHS, lr, MIN_DELTA, PATIENCE, bs, VAL_SPLIT)
-                #evaluation_temp_model = history_temp_model.model.evaluate(x_test_resized, y_test_hot_encoded)
-                preds = history_temp_model.model.predict_classes(x_test_resized, verbose=1)
-                results, predictions, labels = metrics(y_test, preds)
-            else:
-                history_temp_model, train_dict = model(x_train_resized_NASNet, y_train_hot_encoded, temp_model,  NUM_EPOCHS, lr, MIN_DELTA, PATIENCE, bs, VAL_SPLIT)
-                #evaluation_temp_model = history_temp_model.model.evaluate(x_test_resized_NASNet, y_test_hot_encoded)
-                preds = history_temp_model.model.predict_classes(x_test_resized_NASNet, verbose=1)
-                results, predictions, labels = metrics(y_test, preds)
+        top_f1 = 0
 
-            if results["f1"] > top_f1:
-                top_f1 = learning_rate_dict[lr]["f1"]
-                print("The new top F1 score is: {}. Saving model...".format(top_f1))
-                image_save_model(history_temp_model, model_selection, OUTPUT_DIR , train_dict, y_test, preds, results)
-                best_models[model_selection] = {"Learning Rate": lr, "Batch_Size": bs, "Results": results} #only save results for best model
+        for bs in BATCH_SIZE:
+            for lr in LEARNING_RATE:
+                temp_model = MODEL_DICT[model_selection](weights='imagenet', include_top=False)
 
-#save complete training results
-np.save(os.path.join(OUTPUT_DIR, "dogwhistle_total_image_training_results.npy"), results_dict)
+                if model_selection != "NASNetLarge":
+                    history_temp_model, train_dict = model(x_train_resized, y_train_hot_encoded, temp_model, NUM_EPOCHS, lr, MIN_DELTA, PATIENCE, bs, VAL_SPLIT)
+                    #evaluation_temp_model = history_temp_model.model.evaluate(x_test_resized, y_test_hot_encoded)
+                    preds = history_temp_model.model.predict_classes(x_test_resized, verbose=1)
+                    results, predictions, labels = metrics(y_test, preds)
+                else:
+                    history_temp_model, train_dict = model(x_train_resized_NASNet, y_train_hot_encoded, temp_model,  NUM_EPOCHS, lr, MIN_DELTA, PATIENCE, bs, VAL_SPLIT)
+                    #evaluation_temp_model = history_temp_model.model.evaluate(x_test_resized_NASNet, y_test_hot_encoded)
+                    preds = history_temp_model.model.predict_classes(x_test_resized_NASNet, verbose=1)
+                    results, predictions, labels = metrics(y_test, preds)
 
-#Practice with one iteration
-temp_model = NASNetLarge(weights='imagenet', include_top=False)
-history_temp_model = model(x_train_resized_NASNet, y_train_hot_encoded, temp_model, NUM_EPOCHS, 0.001, MIN_DELTA, PATIENCE, 64, VAL_SPLIT)
-preds = history_temp_model.model.evaluate(x_test_resized_NASNet, y_test_hot_encoded)
-results, predictions, labels = metrics(y_test, preds)
-image_save_model(history_temp_model, model_selection, OUTPUT_DIR , train_dict, y_test, preds, results)
+                if results["f1"] > top_f1:
+                    top_f1 = learning_rate_dict[lr]["f1"]
+                    print("The new top F1 score is: {}. Saving model...".format(top_f1))
+                    image_save_model(history_temp_model, model_selection, OUTPUT_DIR , train_dict, y_test, preds, results)
+                    best_models[model_selection] = {"Learning Rate": lr, "Batch_Size": bs, "Results": results} #only save results for best model
+
+    #save complete training results
+    np.save(os.path.join(OUTPUT_DIR, "dogwhistle_total_image_training_results.npy"), results_dict)
+
+    #Practice with one iteration
+    # temp_model = NASNetLarge(weights='imagenet', include_top=False)
+    # history_temp_model = model(x_train_resized_NASNet, y_train_hot_encoded, temp_model, NUM_EPOCHS, 0.001, MIN_DELTA, PATIENCE, 64, VAL_SPLIT)
+    # preds = history_temp_model.model.evaluate(x_test_resized_NASNet, y_test_hot_encoded)
+    # results, predictions, labels = metrics(y_test, preds)
+    # image_save_model(history_temp_model, model_selection, OUTPUT_DIR , train_dict, y_test, preds, results)

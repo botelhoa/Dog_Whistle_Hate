@@ -294,45 +294,46 @@ class LSTMClassifier(nn.Module):
 
 """## Run Model"""
 
-#define hyperparameters
-INPUT_DIM = len(TEXT.vocab)
-PAD_ID = TEXT.vocab.stoi[TEXT.pad_token]
-UNK_ID = TEXT.vocab.stoi[TEXT.unk_token]
-N_EPOCHS = 50
-EARLY_STOPPING = {"patience": 10, "delta": 0.01}
-LEARNING_RATES = [0.0001, 0.001, 0.01, 0.1, 1]
-OUTPUT_DIR = "/content/drive/My Drive/Dog_Whistle_Code/Fine_Tuned_Models/Text/LSTM"
+if __name__ == '__main__':
+    #define hyperparameters
+    INPUT_DIM = len(TEXT.vocab)
+    PAD_ID = TEXT.vocab.stoi[TEXT.pad_token]
+    UNK_ID = TEXT.vocab.stoi[TEXT.unk_token]
+    N_EPOCHS = 50
+    EARLY_STOPPING = {"patience": 10, "delta": 0.01}
+    LEARNING_RATES = [0.0001, 0.001, 0.01, 0.1, 1]
+    OUTPUT_DIR = "/content/drive/My Drive/Dog_Whistle_Code/Fine_Tuned_Models/Text/LSTM"
 
-results_dict = {}
-max_f1_value = 0
+    results_dict = {}
+    max_f1_value = 0
 
-for i in LEARNING_RATES:
-    # Initialize LSTM model
-    model = LSTMClassifier(train_set, dev_set, test_set, PAD_ID, INPUT_DIM)  
+    for i in LEARNING_RATES:
+        # Initialize LSTM model
+        model = LSTMClassifier(train_set, dev_set, test_set, PAD_ID, INPUT_DIM)  
 
-    # Load pretrained vector
-    model.embedding.weight.data.copy_(TEXT.vocab.vectors) 
+        # Load pretrained vector
+        model.embedding.weight.data.copy_(TEXT.vocab.vectors) 
 
-    # Manually initialize UNK and PAD tokens as zero vectors (and NOT randomly as would be done otherwise)
-    model.embedding.weight.data[UNK_ID] = torch.zeros(300)
-    model.embedding.weight.data[PAD_ID] = torch.zeros(300)
+        # Manually initialize UNK and PAD tokens as zero vectors (and NOT randomly as would be done otherwise)
+        model.embedding.weight.data[UNK_ID] = torch.zeros(300)
+        model.embedding.weight.data[PAD_ID] = torch.zeros(300)
 
-    #model test
-    train_dict = model.trainer(model, i, EARLY_STOPPING, N_EPOCHS) 
-    results_dict[i], labels, preds = model.test(model)
+        #model test
+        train_dict = model.trainer(model, i, EARLY_STOPPING, N_EPOCHS) 
+        results_dict[i], labels, preds = model.test(model)
 
-    if results_dict[i]["f1"] >= max_f1_value: #only save best model
-        max_f1_value = results_dict[i]["f1"]
-        model_saver(model, "LSTM", OUTPUT_DIR, train_dict, labels, preds, results_dict[i])
+        if results_dict[i]["f1"] >= max_f1_value: #only save best model
+            max_f1_value = results_dict[i]["f1"]
+            model_saver(model, "LSTM", OUTPUT_DIR, train_dict, labels, preds, results_dict[i])
 
-#save complete training results
-np.save(os.path.join(OUTPUT_DIR, "dogwhistle_total_training_results.npy"), results_dict)
+    #save complete training results
+    np.save(os.path.join(OUTPUT_DIR, "dogwhistle_total_training_results.npy"), results_dict)
 
-X_TICK_LABELS = []
-Y_TICK_LABELS = []
-COLOR = "blues"
-SAVE_NAME = "LSTM_cm_dogwhistle.png"
-BEST_RESULTS = 
+    X_TICK_LABELS = []
+    Y_TICK_LABELS = []
+    COLOR = "blues"
+    SAVE_NAME = "LSTM_cm_dogwhistle.png"
+    BEST_RESULTS = 
 
-confusion_matrix_plotter(BEST_RESULTS, SAVE_NAME, X_TICK_LABELS, Y_TICK_LABELS, COLOR)
+    confusion_matrix_plotter(BEST_RESULTS, SAVE_NAME, X_TICK_LABELS, Y_TICK_LABELS, COLOR)
 

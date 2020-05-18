@@ -579,7 +579,7 @@ annotator4 = {"Round 1": annotator_dict1["Annotator3"], "Round 2": annotator_dic
 
 
 
-#Note: expert can disagree with both annotators, this the numbers to not add up to 2
+#Note: expert can disagree with both annotators, the numbers to not add up to 2
 agreement_percents = []
 for num, i in enumerate([annotator1, annotator2, annotator3, annotator4]):
     annotator_vals = []

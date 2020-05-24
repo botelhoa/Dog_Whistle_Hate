@@ -11,7 +11,7 @@
 ## Classification Models
 * Code for unimodal image model (DenseNet201, InceptionResNetV2, InceptionV3, MobileNetV2, NASNetLarge, ResNet152V2, Xception, VGG16)
 * Code for unimodal text model- LSTM
-* Code for unimodal text model- Transformer (ALBERT, BART, BERT, DistilBERT, RoBERTa, XLNET)
+* Code for unimodal text model- Transformer (ALBERT, BART, BERT, DistilBERT, Electra, RoBERTa, XLNET)
 * Code for multimodal model
 * Python implementation of best performing model
 

@@ -345,11 +345,11 @@ df.to_csv("/content/drive/My Drive/Dog_Whistle_Code/Fine_Tuned_Models/Text/LSTM/
 
 
 
-X_TICK_LABELS = [] #TODO: ADD
-Y_TICK_LABELS = [] #TODO: ADD
-COLOR = "blues"
+X_TICK_LABELS = ["None", "Hateful", "Counter-speech", "Reclaimed"]
+Y_TICK_LABELS = ["None", "Hateful", "Counter-speech", "Reclaimed"]
+COLOR = "Blues"
 SAVE_NAME = "LSTM_cm_dogwhistle.png"
-BEST_RESULTS = np.load("", allow_pickle=True)
+CM = np.load("", allow_pickle=True)
 
-confusion_matrix_plotter(BEST_RESULTS, SAVE_NAME, X_TICK_LABELS, Y_TICK_LABELS, COLOR)
+confusion_matrix_plotter(CM, SAVE_NAME, X_TICK_LABELS, Y_TICK_LABELS, COLOR)
 

@@ -9,9 +9,9 @@
 * [Dog Whistle 5k dataset](#Dog-Whistle-5k-dataset)
 
 ## Classification Models
-* Code for unimodal image model (DenseNet201, InceptionResNetV2, InceptionV3, MobileNetV2, NASNetLarge, ResNet152V2, Xception, VGG16)
+* Code for unimodal image model (InceptionResNetV2, NASNetLarge, Xception)
 * Code for unimodal text model- LSTM
-* Code for unimodal text model- Transformer (ALBERT, BART, BERT, DistilBERT, Electra, RoBERTa, XLNET)
+* Code for unimodal text model- Transformer (ALBERT, BERT, Electra, RoBERTa)
 * Code for multimodal model
 * Python implementation of best performing model
 

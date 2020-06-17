@@ -7,7 +7,6 @@ CovNet library.
 
 """
 
-
 import random
 import cv2
 import numpy as np
@@ -22,7 +21,6 @@ from keras.utils import to_categorical
 from keras.models import Model
 from keras.layers import Dense, GlobalAveragePooling2D, Dropout
 from keras.optimizers import SGD, RMSprop
-from tensorflow.keras.optimizers.schedules import ExponentialDecay #Is this needed?
 from keras.callbacks import LearningRateScheduler
 from keras.callbacks import EarlyStopping
 from keras.applications import InceptionV3, VGG16, DenseNet201, MobileNetV2, ResNet152V2, InceptionResNetV2, NASNetLarge, Xception
@@ -40,7 +38,6 @@ from helperfunctions import *
 !cp -r "/content/drive/My Drive/Dog_Whistle_Code/Data/Test/Test_images" "/content"
 
  
-
 
 def fine_tune(base_model, train_directory, dev_directory, optimzer, scheduler, image_size: int, num_epochs: int=10, min_delta= 0, patience: int=10, batch_size: int=64, dropout: float=0.5):
     """

@@ -179,8 +179,6 @@ def metrics(labels, preds, argmax_needed: bool = False):
 
     pred: list of model predictions
     """
-    labels = labels
-    preds = preds
 
     if argmax_needed == True:
         preds = np.argmax(preds, axis=1).flatten()

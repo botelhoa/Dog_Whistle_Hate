@@ -178,6 +178,8 @@ def metrics(labels, preds, argmax_needed: bool = False):
     labels: list of correct labels
 
     pred: list of model predictions
+    
+    argmax_needed (boolean): converts logits to predictions. Defaulted to false.
     """
 
     if argmax_needed == True:

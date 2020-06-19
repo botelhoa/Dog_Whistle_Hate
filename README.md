@@ -2,6 +2,8 @@
 
 ## This repository contains the code used to produce the results in _Deciphering Dog Whistles: Evaluating Automated Detection Algorithms for Multimodal Hate (Botelho 2020)_
 
+Warning: Data contains sensitive content
+
 
 ## Table of Contents
 * [Classification Models](#Classification-Models)

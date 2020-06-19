@@ -1,6 +1,6 @@
 # Under Construction...
 
-## This repository contains the code used to produce the results in (forthcoming paper)
+## This repository contains the code used to produce the results in Deciphering Dog Whistles: Evaluating AutomatedDetection Algorithms for Multimodal Hate
 
 
 ## Table of Contents

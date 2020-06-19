@@ -21,7 +21,7 @@ from helperfunctions import *
 
 """### Prepare Data"""
 
-NOMARLIZE_LIST = ['url', 'email', 'percent', 'money', 'phone', 'user', 'time', 'date', 'number']
+NORMALIZE_LIST = ['url', 'email', 'percent', 'money', 'phone', 'user', 'time', 'date', 'number']
 ANNOTATE_LIST = ['hashtag', 'allcaps', 'elongated', 'repeated', 'emphasis', 'censored']
 
 
@@ -36,9 +36,9 @@ dev["text"] = combine_text(dev)
 test["text"] = combine_text(test)
 
 # Clean data
-train["text"] = clean_text(train["text"], NOMARLIZE_LIST, ANNOTATE_LIST)
-dev["text"] = clean_text(dev["text"], NOMARLIZE_LIST, ANNOTATE_LIST)
-test["text"] = clean_text(test["text"], NOMARLIZE_LIST, ANNOTATE_LIST)
+train["text"] = clean_text(train["text"], NORMALIZE_LIST, ANNOTATE_LIST)
+dev["text"] = clean_text(dev["text"], NORMALIZE_LIST, ANNOTATE_LIST)
+test["text"] = clean_text(test["text"], NORMALIZE_LIST, ANNOTATE_LIST)
 
 # Rename label column 
 train["labels"] = train["Unimodal_text_numeric"]

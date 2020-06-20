@@ -1,4 +1,4 @@
-## Deciphering Dog Whistles: Evaluating Automated Detection Algorithms for Multimodal Hate (Botelho 2020)
+# Deciphering Dog Whistles: Evaluating Automated Detection Algorithms for Multimodal Hate (Botelho 2020)
 
 This respository contains the code used to produce the results in _Deciphering Dog Whistles: Evaluating Automated Detection Algorithms for Multimodal Hate (Botelho 2020)_. A special thanks to Scott Hale and Bertie Vidgen for advising the research and the Oxford Internet Institute and The Alan Turing Institute for their generous support.
 

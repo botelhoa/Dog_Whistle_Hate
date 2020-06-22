@@ -191,7 +191,7 @@ def metrics(labels, preds, argmax_needed: bool = False):
 
     f1 = f1_score(labels, preds, average= "weighted")
     precision = precision_score(labels, preds, average= "weighted")
-    recall = f1_score(labels, preds, average= "weighted")
+    recall = recall_score(labels, preds, average= "weighted")
 
     results = {
         "mcc": mcc,

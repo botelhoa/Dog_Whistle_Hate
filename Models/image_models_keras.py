@@ -153,24 +153,20 @@ def test(trained_model, test_directory, image_size: int, batch_size: int=64):
         classes=["None", "Hateful", "Counter-speech", "Reclaimed"],
         class_mode="categorical",
         batch_size=batch_size,
-        shuffle=True,
+        shuffle=False,
         seed=22)
 
     label_list = []
 
     for i in range(len(test_generator)):
-        for j in range(len(test_generator[i][1])):
-            value = np.argmax(test_generator[i][1][j])
-            label_list.append(value)
+        values = np.argmax(test_generator[i][1], axis=1).flatten()
+        label_list.extend(values)
     
     preds = trained_model.predict(test_generator)
-    pred_values = tf.argmax(preds, axis=1)
 
-    #label_list = label_list.numpy().tolist()
+    results, labels, predictions = metrics(label_list, preds, argmax_needed=True)
 
-    results, predictions, labels = metrics(label_list, pred_values)
-
-    return results, predictions, labels
+    return results, predictions, labels, test_generator
 
 
 
@@ -281,24 +277,24 @@ X_SCHEDULER = LearningRateScheduler(X_decay)
 #Train and Test InceptionResNet-V2
 model = InceptionResNetV2(weights='imagenet', include_top=False, input_shape=(IRN_IMAGE_SIZE, IRN_IMAGE_SIZE, 3))
 trained_model, train_dict = fine_tune(model, TRAIN_PATH, DEV_PATH, IRN_OPTIMIZER, IRN_SCHEDULER, IRN_IMAGE_SIZE, NUM_EPOCHS, MIN_DELTA, PATIENCE, BATCH_SIZE, DROPOUT)   
-results1, predictions1, labels1 = test(trained_model, TEST_PATH_MULTIMODAL, IRN_IMAGE_SIZE, BATCH_SIZE) 
-results2, _, labels2 = test(trained_model, TEST_PATH_UNIMODAL, IRN_IMAGE_SIZE, BATCH_SIZE)
+results1, predictions1, labels1, test_generator1 = test(trained_model, TEST_PATH_MULTIMODAL, IRN_IMAGE_SIZE, BATCH_SIZE) 
+results2, _, labels2, test_generator2 = test(trained_model, TEST_PATH_UNIMODAL, IRN_IMAGE_SIZE, BATCH_SIZE)
 image_model_saver(trained_model, "InceptionResNetV2", OUTPUT_DIR, train_dict, labels1, labels2, predictions1, results1, results2)
 
 
 #Train and Test NASNet
 model = NASNetLarge(weights='imagenet', include_top=False, input_shape=(NN_IMAGE_SIZE, NN_IMAGE_SIZE, 3))
 trained_model, train_dict = fine_tune(model, TRAIN_PATH, DEV_PATH, NN_OPTIMIZER, NN_SCHEDULER, NN_IMAGE_SIZE, NUM_EPOCHS, MIN_DELTA, PATIENCE, BATCH_SIZE, DROPOUT)   
-results1, predictions1, labels1 = test(trained_model, TEST_PATH_MULTIMODAL, NN_IMAGE_SIZE, BATCH_SIZE) 
-results2, _, labels2 = test(trained_model, TEST_PATH_UNIMODAL, NN_IMAGE_SIZE, BATCH_SIZE) 
+results1, predictions1, labels1, test_generator1 = test(trained_model, TEST_PATH_MULTIMODAL, NN_IMAGE_SIZE, BATCH_SIZE) 
+results2, _, labels2, test_generator2 = test(trained_model, TEST_PATH_UNIMODAL, NN_IMAGE_SIZE, BATCH_SIZE) 
 image_model_saver(trained_model, "NASNet", OUTPUT_DIR, train_dict, labels1, labels2, predictions1, results1, results2)
 
 
 #Train and Test Xception
 model = Xception(weights='imagenet', include_top=False, input_shape=(X_IMAGE_SIZE, X_IMAGE_SIZE, 3))
 trained_model, train_dict = fine_tune(model, TRAIN_PATH, DEV_PATH, X_OPTIMIZER, X_SCHEDULER, X_IMAGE_SIZE, NUM_EPOCHS, MIN_DELTA, PATIENCE, BATCH_SIZE, DROPOUT)   
-results1, predictions1, labels1 = test(trained_model, TEST_PATH_MULTIMODAL, X_IMAGE_SIZE, BATCH_SIZE) 
-results2, _, labels2 = test(trained_model, TEST_PATH_UNIMODAL, X_IMAGE_SIZE, BATCH_SIZE)
+results1, predictions1, labels1, test_generator2 = test(trained_model, TEST_PATH_MULTIMODAL, X_IMAGE_SIZE, BATCH_SIZE) 
+results2, _, labels2, test_generator2 = test(trained_model, TEST_PATH_UNIMODAL, X_IMAGE_SIZE, BATCH_SIZE)
 image_model_saver(trained_model, "Xception", OUTPUT_DIR, train_dict, labels1, labels2, predictions1, results1, results2)
 
 

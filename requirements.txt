@@ -16,3 +16,4 @@ functools
 operator
 collections
 transformers
+simpletransformers

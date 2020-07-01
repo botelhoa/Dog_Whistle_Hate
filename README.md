@@ -24,6 +24,6 @@ Warning: Data contains sensitive content
 * Model output analysis
 
 ## Dog Whistle 5k Dataset
-* Corpus of 5,000 annotated tweets subsampled from the [MMHS150k](https://gombru.github.io/2019/10/09/MMHS/) dataset. Annotated for Hate, Modality, Target, Strength, and Strategy (i.e. dog whistle or not)
+* Corpus of 5,000 annotated tweets subsampled from the [MMHS150k](https://gombru.github.io/2019/10/09/MMHS/) dataset. Annotated for Hate, Modality, Target, Strength, and Strategy (i.e. dog whistle or not). Note: images can be downloaded from the original dataset
 * Codebook used to train annotation decisions
 * Train/Validation/Test data splits

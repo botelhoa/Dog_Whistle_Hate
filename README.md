@@ -1,6 +1,6 @@
 # Deciphering Implicit Hate: Evaluating AutomatedDetection Algorithms for Multimodal Hate (Botelho, Vidgen, and Hale 2021)
 
-This respository contains the code used to produce the results in _Deciphering Implicit Hate: Evaluating AutomatedDetection Algorithms for Multimodal Hate (Botelho, Vidgen, and Hale 2021)_. A special thanks to the Oxford Internet Institute and The Alan Turing Institute for their generous support.
+This respository contains the code used to produce the results in _Deciphering Implicit Hate: Evaluating AutomatedDetection Algorithms for Multimodal Hate (Botelho, Vidgen, and Hale 2021)_ as published in Findings at ACL-IJCNLP 2021. A special thanks to the Oxford Internet Institute and The Alan Turing Institute for their generous support.
 
 Warning: Data contains sensitive content
 

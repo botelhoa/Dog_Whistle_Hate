@@ -5,6 +5,8 @@ This respository contains the code used to produce the results in _Deciphering I
 Warning: Data contains sensitive content
 
 
+For the full dataset and model weights, [go here](https://zenodo.org/record/5123567#.YPoVqDopBH4)
+
 ## Table of Contents
 * [Classification Models](#Classification-Models)
 * [Data Analysis](#Data-Analysis)
